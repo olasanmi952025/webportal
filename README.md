@@ -1,46 +1,155 @@
-# Getting Started with Create React App
+# Portal Aduana Chile - React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Portal web moderno desarrollado en React con TypeScript y Tailwind CSS, diseñado específicamente para los estándares de la Aduana de Chile.
 
-## Available Scripts
+## 🚀 Características
 
-In the project directory, you can run:
+- **Diseño Moderno**: Interfaz adaptada a los estándares visuales de la Aduana de Chile
+- **Responsive**: Optimizado para desktop, tablet y móvil
+- **Navegación Intuitiva**: Sidebar con navegación clara y accesible
+- **Componentes Reutilizables**: Arquitectura modular y escalable
+- **TypeScript**: Tipado estático para mayor robustez
+- **Tailwind CSS**: Estilos modernos y consistentes
 
-### `npm start`
+## 📋 Vistas Implementadas
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Prioridad Alta (Core del Portal)
+- ✅ **Dashboard** (`/`) - Mi Escritorio principal
+- ✅ **Mis Aplicaciones** (`/applications`) - Gestión de aplicaciones asignadas
+- ✅ **Mis Vistas** (`/views`) - Configuración de vistas personalizadas
+- ✅ **Búsqueda** (`/search`) - Consulta de documentos
+- ✅ **Configuración** (`/settings`) - Configuración personal del usuario
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Funcionalidades Principales
+- **Dashboard**: Estadísticas, actividad reciente y acciones rápidas
+- **Aplicaciones**: Lista de aplicaciones con filtros y búsqueda
+- **Vistas**: Gestión de vistas de datos con filtros y columnas configurables
+- **Búsqueda**: Tabla de resultados con paginación y filtros avanzados
+- **Configuración**: Perfil, notificaciones, seguridad y apariencia
 
-### `npm test`
+## 🛠️ Tecnologías Utilizadas
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **React 18** con TypeScript
+- **React Router DOM** para navegación
+- **Tailwind CSS** para estilos
+- **Lucide React** para iconos
+- **Create React App** como base
 
-### `npm run build`
+## 🎨 Paleta de Colores
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```css
+/* Colores oficiales Aduana Chile */
+--aduana-blue: #1e3a8a      /* Azul principal */
+--aduana-light-blue: #3b82f6 /* Azul claro */
+--aduana-red: #dc2626        /* Rojo para alertas */
+--aduana-green: #059669      /* Verde para éxito */
+--aduana-gray: #6b7280      /* Gris neutro */
+--aduana-light-gray: #f3f4f6 /* Gris claro */
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🚀 Instalación y Uso
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerrequisitos
+- Node.js 16+ 
+- npm o yarn
 
-### `npm run eject`
+### Instalación
+```bash
+# Clonar el repositorio
+git clone <repository-url>
+cd portal-aduana-chile
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Instalar dependencias
+npm install
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Iniciar servidor de desarrollo
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Scripts Disponibles
+```bash
+npm start          # Servidor de desarrollo
+npm run build      # Build de producción
+npm test           # Ejecutar tests
+npm run eject      # Ejectar configuración (irreversible)
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 📁 Estructura del Proyecto
 
-## Learn More
+```
+src/
+├── components/          # Componentes reutilizables
+│   ├── Layout.tsx      # Layout principal
+│   ├── Sidebar.tsx     # Navegación lateral
+│   └── Header.tsx      # Cabecera de página
+├── views/              # Vistas principales
+│   ├── Dashboard.tsx   # Mi Escritorio
+│   ├── Applications.tsx # Mis Aplicaciones
+│   ├── Views.tsx       # Mis Vistas
+│   ├── SearchResults.tsx # Búsqueda
+│   └── Settings.tsx    # Configuración
+├── types/              # Definiciones TypeScript
+│   └── index.ts       # Interfaces y tipos
+├── App.tsx            # Componente raíz
+└── index.css          # Estilos globales
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🎯 Migración desde JSP
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Este proyecto migra las siguientes vistas del sistema original:
+
+| Vista Original | Nueva Vista | Estado |
+|---------------|-------------|--------|
+| `index.jsp` | Dashboard | ✅ Migrado |
+| `MisAplicaciones.jsp` | Applications | ✅ Migrado |
+| `MisVistas.jsp` | Views | ✅ Migrado |
+| `ResultadoBusqueda.jsp` | SearchResults | ✅ Migrado |
+| `ConfigurarSitio.jsp` | Settings | ✅ Migrado |
+
+## 🔧 Configuración
+
+### Tailwind CSS
+El proyecto está configurado con Tailwind CSS personalizado para la Aduana de Chile:
+
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  theme: {
+    extend: {
+      colors: {
+        'aduana-blue': '#1e3a8a',
+        'aduana-light-blue': '#3b82f6',
+        // ... más colores personalizados
+      }
+    }
+  }
+}
+```
+
+## 📱 Responsive Design
+
+El portal está optimizado para:
+- **Desktop**: Layout completo con sidebar
+- **Tablet**: Sidebar colapsable
+- **Mobile**: Navegación adaptada
+
+## 🚀 Próximos Pasos
+
+1. **Integración con Backend**: Conectar con APIs reales
+2. **Autenticación**: Implementar sistema de login
+3. **Estado Global**: Agregar Redux o Context API
+4. **Testing**: Implementar tests unitarios y de integración
+5. **PWA**: Convertir en Progressive Web App
+
+## 📄 Licencia
+
+Este proyecto está desarrollado para la Aduana de Chile.
+
+## 👥 Contribución
+
+Para contribuir al proyecto, seguir las mejores prácticas de React y TypeScript.
+
+---
+
+**Desarrollado con ❤️ para la Aduana de Chile**

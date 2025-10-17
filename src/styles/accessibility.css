@@ -1,0 +1,238 @@
+/* Estilos de accesibilidad gubernamental */
+
+
+/* Basado en framework.digital.gob.cl */
+
+
+/* Aumento de tamaño de fuente */
+
+.a11y-font-0 {
+    font-size: 16px !important;
+}
+
+.a11y-font-1 {
+    font-size: 20px !important;
+}
+
+.a11y-font-2 {
+    font-size: 24px !important;
+}
+
+
+/* Modo contraste alto */
+
+.a11y-contrast {
+    --bg-primary: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --border-primary: #666666;
+    --accent-primary: #0066cc;
+    --accent-secondary: #333333;
+}
+
+.a11y-contrast body {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.a11y-contrast .bg-white {
+    background-color: var(--bg-primary) !important;
+}
+
+.a11y-contrast .text-gray-900 {
+    color: var(--text-primary) !important;
+}
+
+.a11y-contrast .text-gray-700 {
+    color: var(--text-secondary) !important;
+}
+
+.a11y-contrast .text-gray-600 {
+    color: var(--text-secondary) !important;
+}
+
+.a11y-contrast .text-gray-500 {
+    color: var(--text-secondary) !important;
+}
+
+.a11y-contrast .border-gray-200 {
+    border-color: var(--border-primary) !important;
+}
+
+.a11y-contrast .border-gray-300 {
+    border-color: var(--border-primary) !important;
+}
+
+.a11y-contrast .bg-blue-600 {
+    background-color: var(--accent-primary) !important;
+}
+
+.a11y-contrast .bg-gray-100 {
+    background-color: #f0f0f0 !important;
+}
+
+.a11y-contrast .bg-gray-50 {
+    background-color: #f5f5f5 !important;
+}
+
+
+/* Utilidades para diferentes niveles de fuente */
+
+.a11y-font-1-col-12 {
+    width: 100% !important;
+}
+
+.a11y-font-2-col-12 {
+    width: 100% !important;
+}
+
+.a11y-font-1-d-none {
+    display: none !important;
+}
+
+.a11y-font-2-d-none {
+    display: none !important;
+}
+
+.a11y-font-1-m-0 {
+    margin: 0 !important;
+}
+
+.a11y-font-2-m-0 {
+    margin: 0 !important;
+}
+
+.a11y-font-1-text-center {
+    text-align: center !important;
+}
+
+.a11y-font-2-text-center {
+    text-align: center !important;
+}
+
+
+/* Utilidades para cualquier nivel de fuente */
+
+.a11y-fonts-d-none {
+    display: none !important;
+}
+
+.a11y-fonts-m-0 {
+    margin: 0 !important;
+}
+
+.a11y-fonts-text-center {
+    text-align: center !important;
+}
+
+
+/* Mejoras de accesibilidad adicionales */
+
+.a11y-contrast button:focus,
+.a11y-contrast input:focus,
+.a11y-contrast select:focus,
+.a11y-contrast textarea:focus {
+    outline: 3px solid var(--accent-primary) !important;
+    outline-offset: 2px !important;
+}
+
+
+/* Mejoras para lectores de pantalla */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+
+/* Indicadores de estado para accesibilidad */
+
+[aria-expanded="true"]::after {
+    content: " (expandido)";
+}
+
+[aria-expanded="false"]::after {
+    content: " (colapsado)";
+}
+
+
+/* Mejoras para navegación por teclado */
+
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--accent-primary);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+
+/* Estilos para el toolbar de accesibilidad */
+
+.accessibility-toolbar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.accessibility-toolbar button {
+    background-color: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+.accessibility-toolbar button:hover {
+    background-color: #0052a3;
+    transform: scale(1.05);
+}
+
+.accessibility-toolbar button:focus {
+    outline: 3px solid #ffd700;
+    outline-offset: 2px;
+}
+
+
+/* Panel del toolbar */
+
+.accessibility-panel {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: white;
+    border: 2px solid var(--border-primary);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.a11y-contrast .accessibility-panel {
+    background: var(--bg-primary);
+    border-color: var(--border-primary);
+}
