@@ -456,10 +456,10 @@ const ConsultaMarcasPage: React.FC = () => {
       {/* Modal Guías Asociadas */}
       <GuiasModal
         isOpen={mostrarModalGuias}
-        guias={guiasAsociadas}
+        guias={guiasAsociadas as any} // Type assertion to fix type mismatch
         onClose={handleCerrarModal}
         onVerDetalles={(guia) => {
-          setGuiaSeleccionada(guia);
+          setGuiaSeleccionada(guia as any); // Type assertion to fix type mismatch
           setMostrarDetallesGuia(true);
         }}
         onExportXML={handleExportXMLGuias}

@@ -4,6 +4,7 @@ export type Header<T> = {
   sortable?: boolean;
   render?: (row: T) => React.ReactNode;
   visible?: boolean;
+  align?: 'left' | 'center' | 'right';
 }
 
 export type DataTableProps<T> = {

@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginPage, DashboardPage, ConsultaMarcasPage } from './pages';
+import { LoginPage, DashboardPage, ConsultaMarcasPage, BusquedaDocumentosPage } from './pages';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import PasswordRecoveryPage from './pages/PasswordRecoveryPage';
@@ -36,6 +36,14 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <ConsultaMarcasPage />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/consulta-documentos" element={
+            <ProtectedRoute>
+              <Layout>
+                <BusquedaDocumentosPage />
               </Layout>
             </ProtectedRoute>
           } />

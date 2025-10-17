@@ -97,16 +97,21 @@ export function Table<T extends Record<string, unknown>>({
                 <th
                   key={String(header.key)}
                   onClick={() => header.sortable && handleSort(header.key)}
-                  className={`px-4 py-2 text-left font-medium text-gray-700 select-none ${header.sortable ? "cursor-pointer" : ""
-                    }`}
+                  className={`px-4 py-2 font-medium text-gray-700 select-none ${
+                    header.align === 'center' ? 'text-center' : 
+                    header.align === 'right' ? 'text-right' : 'text-left'
+                  } ${header.sortable ? "cursor-pointer" : ""}`}
                 >
-                  <div className="flex items-center gap-1 whitespace-nowrap">
+                  <div className={`flex items-center gap-1 whitespace-nowrap ${
+                    header.align === 'center' ? 'justify-center' : 
+                    header.align === 'right' ? 'justify-end' : 'justify-start'
+                  }`}>
                     {header.label}
                     {header.sortable && <ArrowUpDown size={14} />}
                   </div>
                 </th>
               ))}
-            {actions && <th className="px-4 py-2 text-left">Acciones</th>}
+            {actions && <th className="px-4 py-2 text-center font-medium text-gray-700">Acciones</th>}
           </tr>
         </thead>
 

@@ -4,6 +4,7 @@ export interface Header<T> {
   sortable?: boolean;
   render?: (row: T) => React.ReactNode;
   visible?: boolean;
+  align?: 'left' | 'center' | 'right';
 }
 
 export interface EmptyStateProps {

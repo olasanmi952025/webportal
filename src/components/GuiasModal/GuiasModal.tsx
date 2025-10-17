@@ -29,12 +29,28 @@ export const GuiasModal: React.FC<GuiasModalProps> = ({
     {
       key: 'numeroGuia',
       label: 'Numero Guía',
-      sortable: true
+      sortable: true,
+      align: 'center',
+      render: (row: Guia) => (
+        <div className="flex items-center justify-center">
+          <span className="text-[#006FB3] underline cursor-pointer hover:text-[#005a9c]">
+            {row.numeroGuia}
+          </span>
+        </div>
+      )
     },
     {
       key: 'motivoMarca',
       label: 'Motivo Marca',
-      sortable: true
+      sortable: true,
+      align: 'center',
+      render: (row: Guia) => (
+        <div className="flex items-center justify-center">
+          <span className="text-[#006FB3] underline cursor-pointer hover:text-[#005a9c]">
+            {row.motivoMarca}
+          </span>
+        </div>
+      )
     },
     {
       key: 'seleccion',
@@ -44,7 +60,8 @@ export const GuiasModal: React.FC<GuiasModalProps> = ({
         <div className="flex items-center justify-center">
           <span>-</span>
         </div>
-      )
+      ),
+      align: 'center'
     },
     {
       key: 'detalles',
@@ -65,7 +82,8 @@ export const GuiasModal: React.FC<GuiasModalProps> = ({
             </svg>
           </Button>
         </div>
-      )
+      ),
+      align: 'center'
     }
   ];
 
