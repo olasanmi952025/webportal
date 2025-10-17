@@ -40,7 +40,7 @@ const Select = ({
   }
 
   return (
-    <div className="relative w-64">
+    <div className={`relative ${className}`}>
       <button
         id={id}
         key={id}
@@ -50,7 +50,6 @@ const Select = ({
         className={cn(
           "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm",
           variantStyles[variant],
-          className,
           hasError && "bg-red-100 border-red-200"
         )}
       >

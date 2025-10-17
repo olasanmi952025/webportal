@@ -1,0 +1,1 @@
+export { GuiasModal } from './GuiasModal';

@@ -9,10 +9,10 @@ import type { ButtonConfig, AllowedVariants } from "./button.types";
 const defaultConfig = {
   variants: {
     variant: {
-      primary: "bg-primary text-white hover:bg-blue-700 focus:ring-blue-600",
-      secondary: "bg-white text-primary border hover:bg-gray-50 focus:ring-gray-400",
-      outline: "border bg-gray-50 border-gray-200 text-gray-800 hover:bg-gray-100",
-      danger: "bg-red-400 text-white hover:bg-red-500 focus:ring-red-600",
+      primary: "bg-[#006FB3] text-white hover:bg-[#005a9c] focus:ring-[#006FB3]",
+      secondary: "bg-white text-[#006FB3] border border-[#006FB3] hover:bg-[#EEEEEE] focus:ring-[#006FB3]",
+      outline: "border border-[#A8B7C7] bg-white text-[#4A4A4A] hover:bg-[#EEEEEE]",
+      danger: "bg-[#FE6565] text-white hover:bg-[#e55a5a] focus:ring-[#FE6565]",
     },
     size: {
       sm: "h-8 px-3 text-xs",

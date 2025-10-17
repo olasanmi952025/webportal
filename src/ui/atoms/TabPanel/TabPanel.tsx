@@ -32,8 +32,8 @@ const TabPanel: React.FC<TabPanelProps> = ({
               className={cn(
                 "px-4 py-3 text-sm font-medium transition-all duration-200 border-b-2",
                 activeTab === tab.id
-                  ? "text-blue-600 border-blue-600 bg-blue-50"
-                  : "text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+                  ? "text-[#006FB3] border-[#006FB3] bg-[#EEEEEE]"
+                  : "text-[#8A8A8A] border-transparent hover:text-[#4A4A4A] hover:border-[#A8B7C7]"
               )}
             >
               {tab.label}

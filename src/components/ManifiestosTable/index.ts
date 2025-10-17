@@ -1,0 +1,1 @@
+export { ManifiestosTable } from './ManifiestosTable';

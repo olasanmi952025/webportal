@@ -1,0 +1,1 @@
+export { MasInformacionAccordion } from './MasInformacionAccordion';

@@ -100,7 +100,7 @@ export function Table<T extends Record<string, unknown>>({
                   className={`px-4 py-2 text-left font-medium text-gray-700 select-none ${header.sortable ? "cursor-pointer" : ""
                     }`}
                 >
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 whitespace-nowrap">
                     {header.label}
                     {header.sortable && <ArrowUpDown size={14} />}
                   </div>
