@@ -1,109 +1,61 @@
-import React, { useState } from 'react';
+/**
+ * Página de Consulta de Marcas
+ * 
+ * Permite consultar manifiestos courier marcados y ver sus guías asociadas.
+ * Incluye filtros de fecha y funcionalidad para exportar resultados.
+ * 
+ * @version 2.0 - Refactorizada con mejores prácticas
+ */
+
+import React, { useState, useMemo } from 'react';
 import { 
   FiltrosFecha, 
   ManifiestosTable, 
   GuiasModal, 
   DetallesGuiaModal
 } from '../components';
+import { PageHeader, InfoBanner } from '../components/common';
+import { useModal } from '../hooks';
+import { mockManifiestos, mockGuias } from '../services/mockDataService';
+import type { Guia } from '../types';
 
-interface Manifiesto extends Record<string, unknown> {
-  nroAceptacion: string;
-  nroRefOriginal: string;
-  emisor: string;
-  fechaAceptacion: string;
-  fechaConformacion: string;
-  totalGuias: number;
-  totalGuiasMarcadas: number;
-  totalGuiasRevisadas: string;
-}
-
-interface Guia {
-  numeroGuia: string;
-  motivoMarca: string;
-  resultadoSeleccionDetalle: string;
-}
+// ============================================================================
+// COMPONENTE PRINCIPAL
+// ============================================================================
 
 const ConsultaMarcasPage: React.FC = () => {
+  // ============================================================================
+  // ESTADOS
+  // ============================================================================
+  
   const [fechaInicio, setFechaInicio] = useState('01/10/2025');
   const [fechaTermino, setFechaTermino] = useState('31/10/2025');
-  const [mostrarModalGuias, setMostrarModalGuias] = useState(false);
-  const [mostrarDetallesGuia, setMostrarDetallesGuia] = useState(false);
-  const [guiaSeleccionada, setGuiaSeleccionada] = useState<any>(null);
   const [guiasAsociadas, setGuiasAsociadas] = useState<Guia[]>([]);
 
-  // Estados para filtros de documentos relacionados
+  // Estados para filtros de tabs (mantener para compatibilidad con modal)
   const [tipoRelacion, setTipoRelacion] = useState('TODOS');
   const [referenciado, setReferenciado] = useState(false);
   const [referenciaA, setReferenciaA] = useState(false);
-
-  // Estados para filtros de operaciones
   const [fechaInicioOperaciones, setFechaInicioOperaciones] = useState('');
   const [fechaTerminoOperaciones, setFechaTerminoOperaciones] = useState('');
   const [tipoOperacion, setTipoOperacion] = useState('TODAS');
-
-  // Estado para acordeón
   const [acordeonAbierto, setAcordeonAbierto] = useState<string | null>('participantes');
 
-  // Datos mock para manifiestos
-  const manifiestos: Manifiesto[] = [
-    {
-      nroAceptacion: '84790',
-      nroRefOriginal: 'REF001',
-      emisor: 'MENDEZ TRONCOSO, YERKO WILLIAM',
-      fechaAceptacion: '06/10/2025',
-      fechaConformacion: '06/10/2025',
-      totalGuias: 4,
-      totalGuiasMarcadas: 2,
-      totalGuiasRevisadas: '1'
-    },
-    {
-      nroAceptacion: '84791',
-      nroRefOriginal: 'REF002',
-      emisor: 'EMPRESA TRANSPORTE S.A.',
-      fechaAceptacion: '07/10/2025',
-      fechaConformacion: '07/10/2025',
-      totalGuias: 3,
-      totalGuiasMarcadas: 1,
-      totalGuiasRevisadas: '2'
-    },
-    {
-      nroAceptacion: '84792',
-      nroRefOriginal: 'REF003',
-      emisor: 'LOGISTICA CHILE LTDA.',
-      fechaAceptacion: '08/10/2025',
-      fechaConformacion: '08/10/2025',
-      totalGuias: 5,
-      totalGuiasMarcadas: 3,
-      totalGuiasRevisadas: '0'
-    }
-  ];
+  // ============================================================================
+  // HOOKS DE MODALES
+  // ============================================================================
+  
+  const guiasModal = useModal();
+  const detallesGuiaModal = useModal<Guia>();
 
-  // Datos mock para guías
-  const guiasMock: Guia[] = [
-    {
-      numeroGuia: 'GTIME-IVAD-06102025014',
-      motivoMarca: 'R-RETENCION',
-      resultadoSeleccionDetalle: 'Más Info.'
-    },
-    {
-      numeroGuia: 'GTIME-IVAD-06102025015',
-      motivoMarca: 'R-FISCALIZACION',
-      resultadoSeleccionDetalle: 'Más Info.'
-    },
-    {
-      numeroGuia: 'GTIME-IVAD-06102025016',
-      motivoMarca: 'R-DOCUMENTACION',
-      resultadoSeleccionDetalle: 'Más Info.'
-    },
-    {
-      numeroGuia: 'GTIME-IVAD-06102025007',
-      motivoMarca: 'R-RETENCION',
-      resultadoSeleccionDetalle: 'Más Info.'
-    }
-  ];
+  // ============================================================================
+  // DATOS MOCK
+  // ============================================================================
 
-  // Datos mock para detalles de guía
-  const detallesGuiaMock = {
+  const manifiestos = useMemo(() => mockManifiestos as any[], []);
+
+  // Datos mock para detalles de guía (en producción vendría de API)
+  const detallesGuiaMock = useMemo(() => ({
     numeroGuia: 'GTIME-IVAD-06102025014',
     naviera: 'MENDEZ TRONCOSO, YERKO WILLIAM',
     consignante: 'rut generico ERRAZURIZ 755',
@@ -121,319 +73,162 @@ const ConsultaMarcasPage: React.FC = () => {
     lugarDestino: '',
     fechaCreacion: '06/10/2025',
     totalVolumen: 0.0
+  }), []);
+
+  const documentosRelacionados = useMemo(() => [{
+    id: '1',
+    tipoRelacion: 'REFERENCIA',
+    fechaRelacion: '07/10/2025 00:00',
+    tipoDocumento: 'MFTOC',
+    numeroDocumento: '84790',
+    emisor: 'MENDEZ TRONCOSO, YERKO WILLIAM',
+    fechaEmision: '06/10/2025 00:00',
+    version: '0',
+    fechaInicioVersion: '2025-10-06 15:08:20.0'
+  }], []);
+
+  const operaciones = useMemo(() => [{
+    id: '1',
+    numeroReferencia: 'OP001',
+    numero: '001',
+    fechaInicio: '06/10/2025',
+    fechaTermino: '08/10/2025',
+    tipoOperacion: 'Operacion de Transporte',
+    estado: 'Activa',
+    descripcion: 'Operación de transporte de mercadería'
+  }], []);
+
+  const participantes = useMemo(() => [{
+    id: '1',
+    rol: 'CONSIGNANTE',
+    nombreDigitado: 'Empresa Ejemplo S.A.',
+    tipoId: 'RUT',
+    numeroId: '12.345.678-9',
+    fechaParticipacion: '06/10/2025',
+    nombreRegistradoAduana: 'EMPRESA EJEMPLO SA'
+  }], []);
+
+  const prorrogas = useMemo(() => [{
+    id: '1',
+    fechaProrroga: '10/10/2025',
+    fechaVencimiento: '20/10/2025',
+    observacion: 'Prórroga autorizada',
+    fechaVencimientoAnterior: '15/10/2025'
+  }], []);
+
+  const locaciones = useMemo(() => [{
+    id: '1',
+    tipoLocacion: 'PUERTO',
+    locacion: 'Valparaíso',
+    codigo: 'VAL001',
+    orden: '1'
+  }], []);
+
+  const fechas = useMemo(() => [{
+    id: '1',
+    tipoFecha: 'FECHA DE ARRIBO',
+    fecha: '06/10/2025'
+  }], []);
+
+  const estados = useMemo(() => [{
+    id: '1',
+    tipoEstado: 'ACTIVO',
+    fechaActivacion: '06/10/2025',
+    usuario: 'ymendez',
+    observaciones: 'Estado activo'
+  }], []);
+
+  const observaciones = useMemo(() => [{
+    id: '1',
+    tipoObservacion: 'GENERAL',
+    fecha: '06/10/2025',
+    observacion: 'Observación general del documento',
+    loginUsuario: 'ymendez'
+  }], []);
+
+  // ============================================================================
+  // HANDLERS
+  // ============================================================================
+
+  /**
+   * Maneja el click en ver guías de un manifiesto
+   */
+  const handleVerGuias = (manifiesto: any) => {
+    // En producción, esto sería una llamada a API
+    setGuiasAsociadas(mockGuias as Guia[]);
+    guiasModal.openModal(manifiesto);
   };
 
-  // Datos mock para documentos relacionados
-  const documentosRelacionados = [
-    {
-      id: '1',
-      tipoRelacion: 'REFERENCIA',
-      fechaRelacion: '07/10/2025 00:00',
-      tipoDocumento: 'MFTOC',
-      numeroDocumento: '84790',
-      emisor: 'MENDEZ TRONCOSO, YERKO WILLIAM',
-      fechaEmision: '06/10/2025 00:00',
-      version: '0',
-      fechaInicioVersion: '2025-10-06 15:08:20.0'
-    }
-  ];
-
-  // Datos mock para operaciones
-  const operaciones = [
-    {
-      id: '1',
-      numeroReferencia: 'OP001',
-      numero: '001',
-      fechaInicio: '06/10/2025',
-      fechaTermino: '08/10/2025',
-      tipoOperacion: 'Operacion de Transporte',
-      estado: 'Activa',
-      descripcion: 'Operación de transporte de carga'
-    },
-    {
-      id: '2',
-      numeroReferencia: 'OP002',
-      numero: '002',
-      fechaInicio: '07/10/2025',
-      fechaTermino: '09/10/2025',
-      tipoOperacion: 'Operacion de Almacen',
-      estado: 'Completada',
-      descripcion: 'Operación de almacenamiento temporal'
-    },
-    {
-      id: '3',
-      numeroReferencia: 'OP003',
-      numero: '003',
-      fechaInicio: '08/10/2025',
-      fechaTermino: '10/10/2025',
-      tipoOperacion: 'Operación de Fiscalización',
-      estado: 'En Proceso',
-      descripcion: 'Operación de fiscalización aduanera'
-    },
-    {
-      id: '4',
-      numeroReferencia: 'OP004',
-      numero: '004',
-      fechaInicio: '09/10/2025',
-      fechaTermino: '11/10/2025',
-      tipoOperacion: 'TRANSITO',
-      estado: 'Activa',
-      descripcion: 'Operación de tránsito aduanero'
-    },
-    {
-      id: '5',
-      numeroReferencia: 'OP005',
-      numero: '005',
-      fechaInicio: '10/10/2025',
-      fechaTermino: '12/10/2025',
-      tipoOperacion: 'Operacion de ACOPIO',
-      estado: 'Pendiente',
-      descripcion: 'Operación de acopio de mercancías'
-    }
-  ];
-
-  // Datos mock para observaciones
-  const observaciones = [
-    {
-      id: 'obs1',
-      tipoObservacion: 'GENERAL',
-      fecha: '2025-10-16',
-      observacion: 'GRAL',
-      loginUsuario: 'ymendez'
-    },
-    {
-      id: 'obs2',
-      tipoObservacion: 'Costumer to Customer',
-      fecha: '2025-10-16',
-      observacion: 'C2C',
-      loginUsuario: 'ymendez'
-    },
-    {
-      id: 'obs3',
-      tipoObservacion: 'MOTIVO',
-      fecha: '2025-10-16',
-      observacion: 'qa',
-      loginUsuario: 'ymendez'
-    },
-    {
-      id: 'obs4',
-      tipoObservacion: 'Faltantes',
-      fecha: '2025-10-16',
-      observacion: 'QA',
-      loginUsuario: 'ymendez'
-    }
-  ];
-
-  // Datos mock para participantes
-  const participantes = [
-    {
-      id: 'part1',
-      rol: 'Consignante',
-      nombreDigitado: 'MENDEZ TRONCOSO, YERKO WILLIAM',
-      tipoId: 'RUT',
-      numeroId: '12345678-9',
-      fechaParticipacion: '06/10/2025',
-      nombreRegistradoAduana: 'MENDEZ TRONCOSO, YERKO WILLIAM'
-    },
-    {
-      id: 'part2',
-      rol: 'Consignatario',
-      nombreDigitado: 'rut generico Direccion rut prueba',
-      tipoId: 'RUT',
-      numeroId: '98765432-1',
-      fechaParticipacion: '06/10/2025',
-      nombreRegistradoAduana: 'rut generico Direccion rut prueba'
-    },
-    {
-      id: 'part3',
-      rol: 'Transportista',
-      nombreDigitado: 'MENDEZ TRONCOSO, YERKO WILLIAM ERRAZURIZ 755',
-      tipoId: 'RUT',
-      numeroId: '11111111-1',
-      fechaParticipacion: '06/10/2025',
-      nombreRegistradoAduana: 'MENDEZ TRONCOSO, YERKO WILLIAM ERRAZURIZ 755'
-    },
-    {
-      id: 'part4',
-      rol: 'Naviera',
-      nombreDigitado: 'MENDEZ TRONCOSO, YERKO WILLIAM',
-      tipoId: 'RUT',
-      numeroId: '22222222-2',
-      fechaParticipacion: '06/10/2025',
-      nombreRegistradoAduana: 'MENDEZ TRONCOSO, YERKO WILLIAM'
-    }
-  ];
-
-  // Datos mock para prorrogas
-  const prorrogas = [
-    {
-      id: 'pror1',
-      fechaProrroga: '10/10/2025',
-      fechaVencimiento: '15/10/2025',
-      observacion: 'Prorroga por demora en documentación',
-      fechaVencimientoAnterior: '10/10/2025'
-    },
-    {
-      id: 'pror2',
-      fechaProrroga: '12/10/2025',
-      fechaVencimiento: '18/10/2025',
-      observacion: 'Segunda prorroga por inspección',
-      fechaVencimientoAnterior: '15/10/2025'
-    },
-    {
-      id: 'pror3',
-      fechaProrroga: '15/10/2025',
-      fechaVencimiento: '20/10/2025',
-      observacion: 'Tercera prorroga por revisión adicional',
-      fechaVencimientoAnterior: '18/10/2025'
-    }
-  ];
-
-  // Datos mock para locaciones
-  const locaciones = [
-    {
-      id: 'loc1',
-      tipoLocacion: 'Puerto de Embarque',
-      locacion: 'Tocumen International (Panama City)',
-      codigo: 'PTY',
-      orden: '1'
-    },
-    {
-      id: 'loc2',
-      tipoLocacion: 'Puerto de Desembarque',
-      locacion: 'Arturo Merino Benitez (Santiago)',
-      codigo: 'SCL',
-      orden: '2'
-    }
-  ];
-
-  // Datos mock para fechas
-  const fechas = [
-    {
-      id: 'fecha1',
-      tipoFecha: 'Fecha de Emisión',
-      fecha: '06/10/2025'
-    },
-    {
-      id: 'fecha2',
-      tipoFecha: 'Fecha de Zarpe',
-      fecha: '07/10/2025'
-    }
-  ];
-
-  // Datos mock para estados
-  const estados = [
-    {
-      id: 'est1',
-      tipoEstado: 'Creado',
-      fechaActivacion: '06/10/2025 15:08:20',
-      usuario: 'ymendez',
-      observaciones: 'Documento creado inicialmente'
-    },
-    {
-      id: 'est2',
-      tipoEstado: 'En Proceso',
-      fechaActivacion: '06/10/2025 16:30:15',
-      usuario: 'ymendez',
-      observaciones: 'Documento en proceso de revisión'
-    },
-    {
-      id: 'est3',
-      tipoEstado: 'Marcado',
-      fechaActivacion: '07/10/2025 09:15:30',
-      usuario: 'ymendez',
-      observaciones: 'Documento marcado para revisión'
-    },
-    {
-      id: 'est4',
-      tipoEstado: 'Retenido',
-      fechaActivacion: '07/10/2025 14:45:20',
-      usuario: 'ymendez',
-      observaciones: 'Documento retenido por inspección'
-    },
-    {
-      id: 'est5',
-      tipoEstado: 'Fiscalizado',
-      fechaActivacion: '08/10/2025 11:20:45',
-      usuario: 'ymendez',
-      observaciones: 'Documento fiscalizado'
-    },
-    {
-      id: 'est6',
-      tipoEstado: 'Liberado',
-      fechaActivacion: '08/10/2025 16:55:10',
-      usuario: 'ymendez',
-      observaciones: 'Documento liberado'
-    }
-  ];
-
-  // Handlers
-  const handleBuscar = () => {
-    console.log('Buscando manifiestos...');
+  /**
+   * Maneja el click en ver detalles de una guía
+   */
+  const handleVerDetallesGuia = (guia: any) => {
+    detallesGuiaModal.openModal(guia);
+    guiasModal.closeModal();
   };
 
-  const handleExportXML = () => {
-    console.log('Exportando XML de manifiestos...');
-  };
-
-  const handleCerrarModal = () => {
-    setMostrarModalGuias(false);
-    setGuiasAsociadas([]);
-  };
-
+  /**
+   * Cierra el modal de detalles de guía
+   */
   const handleCerrarDetallesGuia = () => {
-    setMostrarDetallesGuia(false);
-    setGuiaSeleccionada(null);
+    detallesGuiaModal.closeModal();
+    guiasModal.openModal(); // Vuelve al modal de guías
   };
 
-  const handleExportXMLGuias = () => {
-    console.log('Exportando XML de guías...');
+  /**
+   * Maneja la búsqueda de manifiestos con filtros de fecha
+   */
+  const handleBuscar = () => {
+    console.log('Buscando manifiestos...', {
+      fechaInicio,
+      fechaTermino
+    });
   };
 
+  /**
+   * Maneja la exportación de datos
+   */
+  const handleExportXML = () => {
+    console.log('Exportando manifiestos a XML...');
+  };
+
+  /**
+   * Maneja la búsqueda de documentos relacionados
+   */
   const handleBuscarDocumentos = () => {
     console.log('Buscando documentos relacionados...');
   };
 
+  /**
+   * Maneja la búsqueda de operaciones
+   */
   const handleBuscarOperaciones = () => {
     console.log('Buscando operaciones...');
   };
 
+  /**
+   * Toggle del acordeón
+   */
   const handleToggleAcordeon = (seccion: string) => {
     setAcordeonAbierto(acordeonAbierto === seccion ? null : seccion);
   };
+
+  // ============================================================================
+  // RENDER
+  // ============================================================================
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] mb-2">Consulta de Marcas</h1>
-          <div className="mt-2 w-32 h-1.5 bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-full shadow-sm"></div>
-        </div>
+        <PageHeader title="Consulta de Marcas" />
 
         {/* Banner informativo */}
-        <div className="bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-lg shadow-sm p-4 mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-white text-left font-semibold text-sm">Información Importante</h3>
-                <p className="text-white text-xs opacity-90">
-                  Los manifiestos mostrados corresponden al período seleccionado. Utilice los filtros de fecha para ajustar el rango de búsqueda.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-white rounded-full"></div>
-              <div className="w-2 h-2 bg-white bg-opacity-50 rounded-full"></div>
-              <div className="w-2 h-2 bg-white bg-opacity-25 rounded-full"></div>
-            </div>
-          </div>
-        </div>
+        <InfoBanner
+          title="Información Importante"
+          message="Los manifiestos mostrados corresponden al período seleccionado. Utilice los filtros de fecha para ajustar el rango de búsqueda."
+          variant="info"
+        />
 
         {/* Filtro de fechas */}
         <FiltrosFecha
@@ -444,33 +239,27 @@ const ConsultaMarcasPage: React.FC = () => {
           onBuscar={handleBuscar}
         />
 
-        {/* Resultados */}
+        {/* Tabla de manifiestos */}
         <ManifiestosTable
           manifiestos={manifiestos}
-          onVerManifiesto={(manifiesto) => {
-            setGuiasAsociadas(guiasMock);
-            setMostrarModalGuias(true);
-          }}
+          onVerManifiesto={handleVerGuias}
           onExportXML={handleExportXML}
         />
       </div>
 
-      {/* Modal Guías Asociadas */}
+      {/* Modal de Guías Asociadas */}
       <GuiasModal
-        isOpen={mostrarModalGuias}
-        guias={guiasAsociadas as any} // Type assertion to fix type mismatch
-        onClose={handleCerrarModal}
-        onVerDetalles={(guia) => {
-          setGuiaSeleccionada(guia as any); // Type assertion to fix type mismatch
-          setMostrarDetallesGuia(true);
-        }}
-        onExportXML={handleExportXMLGuias}
+        isOpen={guiasModal.isOpen}
+        guias={guiasAsociadas as any}
+        onClose={guiasModal.closeModal}
+        onVerDetalles={handleVerDetallesGuia}
+        onExportXML={() => console.log('Export XML guías')}
       />
 
       {/* Modal Detalles de Guía */}
       <DetallesGuiaModal
-        isOpen={mostrarDetallesGuia}
-        guiaSeleccionada={guiaSeleccionada}
+        isOpen={detallesGuiaModal.isOpen}
+        guiaSeleccionada={detallesGuiaModal.data}
         detallesGuiaMock={detallesGuiaMock}
         documentosRelacionados={documentosRelacionados}
         operaciones={operaciones}
