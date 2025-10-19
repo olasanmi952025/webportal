@@ -77,54 +77,50 @@ export const DetalleFaltasSobrasModal: React.FC<DetalleFaltasSobrasModalProps> =
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Nº Guía Courier:</span>
+                    <span className="text-sm font-medium text-blue-700">Nº de Manifiesto:</span>
                     <span className="text-sm font-semibold text-blue-900">{detalle.numeroManifiesto}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Naviera:</span>
+                    <span className="text-sm font-medium text-blue-700">Cía Courier:</span>
                     <span className="text-sm text-blue-900">{detalle.ciaCourier}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Consignante:</span>
-                    <span className="text-sm text-blue-900">-</span>
+                    <span className="text-sm font-medium text-blue-700">Fecha de Emisión:</span>
+                    <span className="text-sm text-blue-900">{detalle.fechaEmision}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Transportista:</span>
-                    <span className="text-sm text-blue-900">{detalle.ciaCourier}</span>
+                    <span className="text-sm font-medium text-blue-700">Nº de C.A. Master:</span>
+                    <span className="text-sm text-blue-900">{detalle.numeroMaster}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Puerto Descarga:</span>
-                    <span className="text-sm text-blue-900">-</span>
+                    <span className="text-sm font-medium text-blue-700">Nº Vuelo:</span>
+                    <span className="text-sm text-blue-900">{detalle.numeroVuelo}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Creador:</span>
-                    <span className="text-sm text-blue-900">ymendez</span>
+                    <span className="text-sm font-medium text-blue-700">Puerto de Embarque:</span>
+                    <span className="text-sm text-blue-900">{detalle.puertoEmbarque}</span>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Fecha Emisión:</span>
-                    <span className="text-sm text-blue-900">{detalle.fechaEmision}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Consignatario:</span>
-                    <span className="text-sm text-blue-900">-</span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Puerto Carga:</span>
-                    <span className="text-sm text-blue-900">{detalle.puertoEmbarque}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Fecha Creación:</span>
+                    <span className="text-sm font-medium text-blue-700">Fecha de Arribo:</span>
                     <span className="text-sm text-blue-900">{detalle.fechaArribo}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Lugar Recepción:</span>
-                    <span className="text-sm text-blue-900">No especificado</span>
+                    <span className="text-sm font-medium text-blue-700">Total Peso Original:</span>
+                    <span className="text-sm text-blue-900">{detalle.totalPesoOriginal}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-blue-200">
-                    <span className="text-sm font-medium text-blue-700">Lugar Destino:</span>
-                    <span className="text-sm text-blue-900">No especificado</span>
+                    <span className="text-sm font-medium text-blue-700">Total Peso con F y S:</span>
+                    <span className="text-sm text-blue-900">{detalle.totalPesoConFyS}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-blue-200">
+                    <span className="text-sm font-medium text-blue-700">Total Bultos Original:</span>
+                    <span className="text-sm text-blue-900">{detalle.totalBultosOriginal}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-blue-200">
+                    <span className="text-sm font-medium text-blue-700">Total Bultos con F y S:</span>
+                    <span className="text-sm text-blue-900">{detalle.totalBultosConFyS}</span>
                   </div>
                 </div>
               </div>

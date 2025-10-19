@@ -37,7 +37,7 @@ export const InfoBanner: React.FC<InfoBannerProps> = ({
             {icon || defaultIcon}
           </div>
           <div>
-            <h3 className="text-white font-semibold text-sm">{title}</h3>
+            <h3 className="text-white font-semibold text-sm text-left">{title}</h3>
             <p className="text-white text-xs opacity-90">{message}</p>
           </div>
         </div>

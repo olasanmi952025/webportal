@@ -1,52 +1,137 @@
-import React, { useState } from 'react';
+/**
+ * Página de Consulta de Faltas y Sobras
+ * 
+ * Esta página permite consultar las faltas y sobras registradas en los manifiestos.
+ * Incluye filtros de fecha y número de manifiesto.
+ * 
+ * @version 2.0 - Refactorizada con mejores prácticas
+ */
+
+import React, { useMemo } from 'react';
 import { Button } from '../ui/atoms/Button';
-import { DatePicker } from '../ui/atoms/DatePicker';
 import { Input } from '../ui/atoms/Input';
 import { Label } from '../ui/atoms/Label';
 import { DataTable } from '../ui/organism/DataTable';
 import { Header } from '../ui/organism/DataTable/dataTable.types';
 import { DetalleFaltasSobrasModal } from '../components/DetalleFaltasSobrasModal';
+import { PageHeader, InfoBanner, DateRangeFilter } from '../components/common';
+import { useFilters, useModal } from '../hooks';
+import { mockFaltasSobras } from '../services/mockDataService';
+import { sanitizeString } from '../utils';
+import type { FaltaSobra, DetalleFaltaSobra } from '../types';
 
-interface FaltaSobra extends Record<string, unknown> {
-  id: string;
-  numeroAceptacion: string;
-  numeroMaster: string;
-  numeroVuelo: string;
-  ciaCourier: string;
-  pesoGuias: number;
-  totalGuias: number;
-  guiasConFaltas: number;
-  guiasConSobras: number;
+// ============================================================================
+// INTERFACES Y TIPOS
+// ============================================================================
+
+interface FaltasSobrasFilters extends Record<string, any> {
+  fechaEmisionDesde: string;
+  fechaEmisionHasta: string;
+  numeroManifiesto: string;
 }
 
+// ============================================================================
+// CONSTANTES
+// ============================================================================
+
+const INITIAL_FILTERS: FaltasSobrasFilters = {
+  fechaEmisionDesde: '01/10/2025',
+  fechaEmisionHasta: '16/10/2025',
+  numeroManifiesto: ''
+};
+
+// ============================================================================
+// COMPONENTE PRINCIPAL
+// ============================================================================
+
 const ConsultaFaltasSobrasPage: React.FC = () => {
-  // Estados para filtros
-  const [fechaEmisionDesde, setFechaEmisionDesde] = useState('01/10/2025');
-  const [fechaEmisionHasta, setFechaEmisionHasta] = useState('16/10/2025');
-  const [numeroManifiesto, setNumeroManifiesto] = useState('');
-  const [mostrarResultados, setMostrarResultados] = useState(false);
+  // ============================================================================
+  // HOOKS
+  // ============================================================================
   
-  // Estados para modal
-  const [mostrarModalDetalle, setMostrarModalDetalle] = useState(false);
-  const [detalleSeleccionado, setDetalleSeleccionado] = useState<any>(null);
+  const {
+    filters,
+    updateFilter,
+    hasSearched,
+    search,
+    clearSearch
+  } = useFilters<FaltasSobrasFilters>(INITIAL_FILTERS);
 
-  // Datos mock para faltas y sobras
-  const faltasSobras: FaltaSobra[] = [
-    {
-      id: '1',
-      numeroAceptacion: '84790',
-      numeroMaster: '789444',
-      numeroVuelo: '033',
-      ciaCourier: 'MENDEZ TRONCOSO, YERKO WILLIAM',
-      pesoGuias: 12.0,
-      totalGuias: 4,
-      guiasConFaltas: 1,
-      guiasConSobras: 0
+  const detalleModal = useModal<DetalleFaltaSobra>();
+
+  // ============================================================================
+  // DATOS
+  // ============================================================================
+
+  // En producción, esto sería una llamada a API con los filtros
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const faltasSobras = useMemo(() => {
+    // mockApiService devuelve una Promise, pero para el ejemplo usamos datos síncronos
+    return mockFaltasSobras;
+  }, [hasSearched]);
+
+  // ============================================================================
+  // HANDLERS
+  // ============================================================================
+
+  /**
+   * Maneja la búsqueda de faltas y sobras
+   * Sanitiza los inputs antes de buscar
+   */
+  const handleBuscar = () => {
+    // Sanitizar inputs antes de buscar
+    const sanitizedNumero = sanitizeString(filters.numeroManifiesto);
+    
+    if (sanitizedNumero !== filters.numeroManifiesto) {
+      updateFilter('numeroManifiesto', sanitizedNumero);
     }
-  ];
 
-  // Headers para la tabla
-  const headersFaltasSobras: Header<FaltaSobra>[] = [
+    console.log('Buscando faltas y sobras...', {
+      fechaEmisionDesde: filters.fechaEmisionDesde,
+      fechaEmisionHasta: filters.fechaEmisionHasta,
+      numeroManifiesto: sanitizedNumero
+    });
+
+    search();
+  };
+
+  /**
+   * Maneja el click en volver
+   * Limpia la búsqueda y vuelve a mostrar filtros
+   */
+  const handleVolver = () => {
+    clearSearch();
+  };
+
+  /**
+   * Maneja el click en ver detalle
+   * Abre el modal con los datos del detalle
+   */
+  const handleVerDetalle = (faltaSobra: FaltaSobra) => {
+    // En producción, esto sería una llamada a API
+    const detalleMock: DetalleFaltaSobra = {
+      numeroManifiesto: faltaSobra.numeroAceptacion,
+      ciaCourier: faltaSobra.ciaCourier,
+      numeroMaster: faltaSobra.numeroMaster,
+      numeroVuelo: faltaSobra.numeroVuelo,
+      fechaEmision: '2025-10-06 00:00:00.0',
+      puertoEmbarque: 'MIAMI',
+      fechaArribo: '2025-10-18 15:04:00.0',
+      totalPesoOriginal: 600.0,
+      totalPesoConFyS: 0.0,
+      totalBultosOriginal: 12,
+      totalBultosConFyS: 0,
+      guias: []
+    };
+
+    detalleModal.openModal(detalleMock);
+  };
+
+  // ============================================================================
+  // CONFIGURACIÓN DE TABLA
+  // ============================================================================
+
+  const tableHeaders = useMemo<Header<FaltaSobra>[]>(() => [
     {
       key: 'numeroAceptacion',
       label: 'Nro. Aceptación',
@@ -96,7 +181,7 @@ const ConsultaFaltasSobrasPage: React.FC = () => {
       align: 'center'
     },
     {
-      key: 'acciones',
+      key: 'acciones' as keyof FaltaSobra,
       label: 'Acciones',
       sortable: false,
       align: 'center',
@@ -108,6 +193,7 @@ const ConsultaFaltasSobrasPage: React.FC = () => {
             onClick={() => handleVerDetalle(row)}
             className="flex items-center justify-center text-xs px-2 py-1 border-blue-300 text-blue-600 hover:bg-blue-50"
             title="Ver detalle"
+            aria-label={`Ver detalle de ${row.numeroAceptacion}`}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -117,102 +203,43 @@ const ConsultaFaltasSobrasPage: React.FC = () => {
         </div>
       )
     }
-  ];
+  ], []);
 
-  // Handlers
-  const handleBuscar = () => {
-    console.log('Buscando faltas y sobras...', {
-      fechaEmisionDesde,
-      fechaEmisionHasta,
-      numeroManifiesto
-    });
-    setMostrarResultados(true);
-  };
-
-  const handleCancelar = () => {
-    setMostrarResultados(false);
-  };
-
-  const handleVerDetalle = (faltaSobra: FaltaSobra) => {
-    // Datos mock del detalle
-    const detalleMock = {
-      numeroManifiesto: faltaSobra.numeroAceptacion,
-      ciaCourier: faltaSobra.ciaCourier,
-      numeroMaster: faltaSobra.numeroMaster,
-      numeroVuelo: faltaSobra.numeroVuelo,
-      fechaEmision: '2025-10-06 00:00:00.0',
-      puertoEmbarque: 'MIAMI',
-      fechaArribo: '2025-10-18 15:04:00.0',
-      totalPesoOriginal: 600.0,
-      totalPesoConFyS: 0.0,
-      totalBultosOriginal: 12,
-      totalBultosConFyS: 0,
-      guias: [] // Sin guías por ahora, se puede agregar datos mock si es necesario
-    };
-    
-    setDetalleSeleccionado(detalleMock);
-    setMostrarModalDetalle(true);
-  };
+  // ============================================================================
+  // RENDER
+  // ============================================================================
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] mb-2">Consulta Faltas y Sobras</h1>
-          <div className="mt-2 w-32 h-1.5 bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-full shadow-sm"></div>
-        </div>
+        <PageHeader title="Consulta Faltas y Sobras" />
 
         {/* Banner informativo */}
-        <div className="bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-lg shadow-sm p-4 mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-white text-left font-semibold text-sm">Información Importante</h3>
-                <p className="text-white text-xs opacity-90">
-                  Consulte las faltas y sobras registradas en el período seleccionado. Utilice los filtros de fecha para ajustar el rango de búsqueda.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-white rounded-full"></div>
-              <div className="w-2 h-2 bg-white bg-opacity-50 rounded-full"></div>
-              <div className="w-2 h-2 bg-white bg-opacity-25 rounded-full"></div>
-            </div>
-          </div>
-        </div>
+        <InfoBanner
+          title="Información Importante"
+          message="Consulte las faltas y sobras registradas en el período seleccionado. Utilice los filtros de fecha para ajustar el rango de búsqueda."
+          variant="info"
+        />
 
         {/* Formulario de filtros */}
-        {!mostrarResultados && (
+        {!hasSearched && (
           <div className="bg-[#006FB3] rounded-lg shadow-sm border border-[#006FB3] p-6 mb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="flex flex-col">
-                <Label htmlFor="fecha-desde" className="text-white mb-2">
-                  Fecha Emisión Desde:
-                </Label>
-                <DatePicker
-                  value={fechaEmisionDesde}
-                  onChange={setFechaEmisionDesde}
-                  placeholder="dd/MM/yyyy"
-                  className="w-full"
+              {/* Filtros de fecha */}
+              <div className="lg:col-span-2">
+                <DateRangeFilter
+                  fechaDesde={filters.fechaEmisionDesde}
+                  fechaHasta={filters.fechaEmisionHasta}
+                  onFechaDesdeChange={(value) => updateFilter('fechaEmisionDesde', value)}
+                  onFechaHastaChange={(value) => updateFilter('fechaEmisionHasta', value)}
+                  labelDesde="Fecha Emisión Desde:"
+                  labelHasta="Fecha Emisión Hasta:"
+                  className="grid-cols-1 md:grid-cols-2 gap-4"
                 />
               </div>
-              <div className="flex flex-col">
-                <Label htmlFor="fecha-hasta" className="text-white mb-2">
-                  Fecha Emisión Hasta:
-                </Label>
-                <DatePicker
-                  value={fechaEmisionHasta}
-                  onChange={setFechaEmisionHasta}
-                  placeholder="dd/MM/yyyy"
-                  className="w-full"
-                />
-              </div>
+
+              {/* Número de Manifiesto */}
               <div className="flex flex-col">
                 <Label htmlFor="numero-manifiesto" className="text-white mb-2">
                   Nº de Manifiesto:
@@ -220,12 +247,15 @@ const ConsultaFaltasSobrasPage: React.FC = () => {
                 <Input
                   id="numero-manifiesto"
                   type="text"
-                  value={numeroManifiesto}
-                  onChange={(e) => setNumeroManifiesto(e.target.value)}
+                  value={filters.numeroManifiesto}
+                  onChange={(e) => updateFilter('numeroManifiesto', e.target.value)}
                   className="w-full"
                   placeholder="Ingrese número de manifiesto"
+                  maxLength={50}
                 />
               </div>
+
+              {/* Botón Consultar */}
               <div className="flex flex-col justify-end lg:col-start-3">
                 <Button
                   onClick={handleBuscar}
@@ -239,12 +269,12 @@ const ConsultaFaltasSobrasPage: React.FC = () => {
         )}
 
         {/* Resultados */}
-        {mostrarResultados && (
+        {hasSearched && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             {/* Botón Volver */}
             <div className="flex justify-start mb-6">
               <Button
-                onClick={handleCancelar}
+                onClick={handleVolver}
                 variant="outline"
                 className="border-[#A8B7C7] text-[#4A4A4A] hover:bg-[#EEEEEE] hover:border-[#8A8A8A] px-6 py-2 rounded-lg font-semibold transition-all duration-200"
               >
@@ -260,12 +290,12 @@ const ConsultaFaltasSobrasPage: React.FC = () => {
                 </h2>
               </div>
             </div>
-            
+
             {/* Tabla */}
             <div className="overflow-x-auto -mx-6">
               <div className="min-w-max">
                 <DataTable
-                  headers={headersFaltasSobras}
+                  headers={tableHeaders}
                   data={faltasSobras}
                   pageSize={10}
                   showPagination={true}
@@ -279,12 +309,9 @@ const ConsultaFaltasSobrasPage: React.FC = () => {
 
       {/* Modal de Detalle */}
       <DetalleFaltasSobrasModal
-        detalle={detalleSeleccionado}
-        isOpen={mostrarModalDetalle}
-        onClose={() => {
-          setMostrarModalDetalle(false);
-          setDetalleSeleccionado(null);
-        }}
+        detalle={detalleModal.data}
+        isOpen={detalleModal.isOpen}
+        onClose={detalleModal.closeModal}
       />
     </div>
   );
