@@ -6,6 +6,7 @@ import { Select } from '../../ui/atoms/Select';
 import { Checkbox } from '../../ui/atoms/Checkbox';
 import { DataTable } from '../../ui/organism/DataTable';
 import { Header } from '../../ui/organism/DataTable/dataTable.types';
+import { MasInformacionAccordion } from '../MasInformacionAccordion/MasInformacionAccordion';
 
 interface DocumentoDetalle {
   id: string;
@@ -46,10 +47,7 @@ interface Operacion extends Record<string, unknown> {
   numero: string;
   fechaInicio: string;
   fechaTermino: string;
-  tipoOperacion: string;
   estado: string;
-  usuario: string;
-  fechaCreacion: string;
 }
 
 interface Observacion extends Record<string, unknown> {
@@ -58,6 +56,46 @@ interface Observacion extends Record<string, unknown> {
   fecha: string;
   observacion: string;
   loginUsuario: string;
+}
+
+interface Participante extends Record<string, unknown> {
+  id: string;
+  rol: string;
+  nombreDigitado: string;
+  tipoId: string;
+  numeroId: string;
+  fechaParticipacion: string;
+  nombreRegistradoAduana: string;
+}
+
+interface Prorroga extends Record<string, unknown> {
+  id: string;
+  fechaProrroga: string;
+  fechaVencimiento: string;
+  observacion: string;
+  fechaVencimientoAnterior: string;
+}
+
+interface Locacion extends Record<string, unknown> {
+  id: string;
+  tipoLocacion: string;
+  locacion: string;
+  codigo: string;
+  orden: string;
+}
+
+interface Fecha extends Record<string, unknown> {
+  id: string;
+  tipoFecha: string;
+  fecha: string;
+}
+
+interface Estado extends Record<string, unknown> {
+  id: string;
+  tipoEstado: string;
+  fechaActivacion: string;
+  usuario: string;
+  observaciones: string;
 }
 
 interface DetallesDocumentoModalProps {
@@ -71,6 +109,9 @@ export const DetallesDocumentoModal: React.FC<DetallesDocumentoModalProps> = ({
   isOpen,
   onClose
 }) => {
+  // Estado para el acordeón
+  const [acordeonAbierto, setAcordeonAbierto] = React.useState<string | null>('participantes');
+
   if (!isOpen || !documento) return null;
 
   // Datos mock para documentos relacionados
@@ -105,56 +146,147 @@ export const DetallesDocumentoModal: React.FC<DetallesDocumentoModalProps> = ({
       id: 'op1',
       numeroReferencia: 'REF001',
       numero: 'OP001',
-      fechaInicio: '2025-10-06 10:00:00',
-      fechaTermino: '2025-10-06 18:00:00',
-      tipoOperacion: 'CREACION',
-      estado: 'Activa',
-      usuario: 'ymendez',
-      fechaCreacion: '2025-10-06 10:00:00'
+      fechaInicio: '06/10/2025',
+      fechaTermino: '08/10/2025',
+      estado: 'Activa'
     },
     {
       id: 'op2',
       numeroReferencia: 'REF002',
       numero: 'OP002',
-      fechaInicio: '2025-10-06 11:00:00',
-      fechaTermino: '2025-10-06 19:00:00',
-      tipoOperacion: 'MODIFICACION',
-      estado: 'Completada',
-      usuario: 'ymendez',
-      fechaCreacion: '2025-10-06 11:00:00'
+      fechaInicio: '07/10/2025',
+      fechaTermino: '09/10/2025',
+      estado: 'Completada'
     },
     {
       id: 'op3',
       numeroReferencia: 'REF003',
       numero: 'OP003',
-      fechaInicio: '2025-10-06 12:00:00',
-      fechaTermino: '2025-10-06 20:00:00',
-      tipoOperacion: 'ELIMINACION',
-      estado: 'En Proceso',
-      usuario: 'ymendez',
-      fechaCreacion: '2025-10-06 12:00:00'
+      fechaInicio: '08/10/2025',
+      fechaTermino: '10/10/2025',
+      estado: 'En Proceso'
     },
     {
       id: 'op4',
       numeroReferencia: 'REF004',
       numero: 'OP004',
-      fechaInicio: '2025-10-06 13:00:00',
-      fechaTermino: '2025-10-06 21:00:00',
-      tipoOperacion: 'CREACION',
-      estado: 'Activa',
-      usuario: 'ymendez',
-      fechaCreacion: '2025-10-06 13:00:00'
+      fechaInicio: '09/10/2025',
+      fechaTermino: '11/10/2025',
+      estado: 'Activa'
     },
     {
       id: 'op5',
       numeroReferencia: 'REF005',
       numero: 'OP005',
-      fechaInicio: '2025-10-06 14:00:00',
-      fechaTermino: '2025-10-06 22:00:00',
-      tipoOperacion: 'MODIFICACION',
-      estado: 'Completada',
+      fechaInicio: '10/10/2025',
+      fechaTermino: '12/10/2025',
+      estado: 'Completada'
+    }
+  ];
+
+  // Datos mock para participantes
+  const participantes: Participante[] = [
+    {
+      id: 'part1',
+      rol: 'Consignante',
+      nombreDigitado: 'MENDEZ TRONCOSO, YERKO WILLIAM',
+      tipoId: 'RUT',
+      numeroId: '12345678-9',
+      fechaParticipacion: '06/10/2025',
+      nombreRegistradoAduana: 'MENDEZ TRONCOSO, YERKO WILLIAM'
+    },
+    {
+      id: 'part2',
+      rol: 'Consignatario',
+      nombreDigitado: 'rut generico Direccion rut prueba',
+      tipoId: 'RUT',
+      numeroId: '98765432-1',
+      fechaParticipacion: '06/10/2025',
+      nombreRegistradoAduana: 'rut generico Direccion rut prueba'
+    },
+    {
+      id: 'part3',
+      rol: 'Transportista',
+      nombreDigitado: 'MENDEZ TRONCOSO, YERKO WILLIAM ERRAZURIZ 755',
+      tipoId: 'RUT',
+      numeroId: '11111111-1',
+      fechaParticipacion: '06/10/2025',
+      nombreRegistradoAduana: 'MENDEZ TRONCOSO, YERKO WILLIAM ERRAZURIZ 755'
+    }
+  ];
+
+  // Datos mock para prorrogas
+  const prorrogas: Prorroga[] = [
+    {
+      id: 'pror1',
+      fechaProrroga: '10/10/2025',
+      fechaVencimiento: '15/10/2025',
+      observacion: 'Prorroga por demora en documentación',
+      fechaVencimientoAnterior: '10/10/2025'
+    },
+    {
+      id: 'pror2',
+      fechaProrroga: '12/10/2025',
+      fechaVencimiento: '18/10/2025',
+      observacion: 'Segunda prorroga por inspección',
+      fechaVencimientoAnterior: '15/10/2025'
+    }
+  ];
+
+  // Datos mock para locaciones
+  const locaciones: Locacion[] = [
+    {
+      id: 'loc1',
+      tipoLocacion: 'Puerto de Embarque',
+      locacion: 'Tocumen International (Panama City)',
+      codigo: 'PTY',
+      orden: '1'
+    },
+    {
+      id: 'loc2',
+      tipoLocacion: 'Puerto de Desembarque',
+      locacion: 'Arturo Merino Benitez (Santiago)',
+      codigo: 'SCL',
+      orden: '2'
+    }
+  ];
+
+  // Datos mock para fechas
+  const fechas: Fecha[] = [
+    {
+      id: 'fecha1',
+      tipoFecha: 'Fecha de Emisión',
+      fecha: '06/10/2025'
+    },
+    {
+      id: 'fecha2',
+      tipoFecha: 'Fecha de Zarpe',
+      fecha: '07/10/2025'
+    }
+  ];
+
+  // Datos mock para estados
+  const estados: Estado[] = [
+    {
+      id: 'est1',
+      tipoEstado: 'Creado',
+      fechaActivacion: '06/10/2025 15:08:20',
       usuario: 'ymendez',
-      fechaCreacion: '2025-10-06 14:00:00'
+      observaciones: 'Documento creado inicialmente'
+    },
+    {
+      id: 'est2',
+      tipoEstado: 'En Proceso',
+      fechaActivacion: '06/10/2025 16:30:15',
+      usuario: 'ymendez',
+      observaciones: 'Documento en proceso de revisión'
+    },
+    {
+      id: 'est3',
+      tipoEstado: 'Marcado',
+      fechaActivacion: '07/10/2025 09:15:30',
+      usuario: 'ymendez',
+      observaciones: 'Documento marcado para revisión'
     }
   ];
 
@@ -163,18 +295,23 @@ export const DetallesDocumentoModal: React.FC<DetallesDocumentoModalProps> = ({
     {
       id: 'obs1',
       tipoObservacion: 'General',
-      fecha: '2025-10-06',
+      fecha: '2025-10-16',
       observacion: 'Documento procesado correctamente',
       loginUsuario: 'ymendez'
     },
     {
       id: 'obs2',
       tipoObservacion: 'Validación',
-      fecha: '2025-10-06',
+      fecha: '2025-10-16',
       observacion: 'Validación de datos completada',
       loginUsuario: 'ymendez'
     }
   ];
+
+  // Handler para toggle del acordeón
+  const handleToggleAcordeon = (seccion: string) => {
+    setAcordeonAbierto(acordeonAbierto === seccion ? null : seccion);
+  };
 
   // Headers para documentos relacionados
   const headersDocumentosRelacionados: Header<DocumentoRelacionado>[] = [
@@ -233,78 +370,37 @@ export const DetallesDocumentoModal: React.FC<DetallesDocumentoModalProps> = ({
     {
       key: 'numeroReferencia',
       label: 'Número Referencia',
-      sortable: true,
-      align: 'left'
+      sortable: true
     },
     {
       key: 'numero',
       label: 'Número',
+      sortable: true
+    },
+    {
+      key: 'estado',
+      label: 'Activa',
       sortable: true,
-      align: 'left'
+      render: (row: Operacion) => (
+        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+          row.estado === 'Activa' ? 'bg-green-100 text-green-800' :
+          row.estado === 'Completada' ? 'bg-blue-100 text-blue-800' :
+          row.estado === 'En Proceso' ? 'bg-yellow-100 text-yellow-800' :
+          'bg-gray-100 text-gray-800'
+        }`}>
+          {row.estado}
+        </span>
+      )
     },
     {
       key: 'fechaInicio',
       label: 'Fecha Inicio',
-      sortable: true,
-      align: 'left'
+      sortable: true
     },
     {
       key: 'fechaTermino',
       label: 'Fecha Término',
-      sortable: true,
-      align: 'left'
-    },
-    {
-      key: 'tipoOperacion',
-      label: 'Tipo Operación',
-      sortable: true,
-      align: 'left'
-    },
-    {
-      key: 'estado',
-      label: 'Estado',
-      sortable: true,
-      align: 'center'
-    },
-    {
-      key: 'usuario',
-      label: 'Usuario',
-      sortable: true,
-      align: 'left'
-    },
-    {
-      key: 'fechaCreacion',
-      label: 'Fecha Creación',
-      sortable: true,
-      align: 'left'
-    }
-  ];
-
-  // Headers para observaciones
-  const headersObservaciones: Header<Observacion>[] = [
-    {
-      key: 'tipoObservacion',
-      label: 'Tipo Observación',
-      sortable: true,
-      align: 'left'
-    },
-    {
-      key: 'fecha',
-      label: 'Fecha',
-      sortable: true,
-      align: 'left'
-    },
-    {
-      key: 'observacion',
-      label: 'Observación',
-      sortable: true,
-      align: 'left'
-    },
-    {
-      key: 'loginUsuario',
-      label: 'Usuario',
-      sortable: true,
-      align: 'left'
+      sortable: true
     }
   ];
 
@@ -558,18 +654,22 @@ export const DetallesDocumentoModal: React.FC<DetallesDocumentoModalProps> = ({
       )
     },
     {
-      id: 'observaciones',
-      label: 'Observaciones',
+      id: 'mas-informacion',
+      label: 'Más Información',
       content: (
-        <div className="p-4 sm:p-6 bg-blue-50">
-          <div className="overflow-x-auto">
-            <DataTable
-              headers={headersObservaciones}
-              data={observaciones}
-              pageSize={10}
-              showPagination={false}
-            />
-          </div>
+        <div className="p-4 sm:p-6">
+          <h3 className="text-lg font-semibold text-[#111111] mb-6">Más Información</h3>
+          
+          <MasInformacionAccordion
+            participantes={participantes}
+            prorrogas={prorrogas}
+            locaciones={locaciones}
+            fechas={fechas}
+            estados={estados}
+            observaciones={observaciones}
+            acordeonAbierto={acordeonAbierto}
+            onToggleAcordeon={handleToggleAcordeon}
+          />
         </div>
       )
     }
@@ -578,8 +678,8 @@ export const DetallesDocumentoModal: React.FC<DetallesDocumentoModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center">
+      <div className="relative w-full max-w-6xl max-h-[95vh] mx-auto">
         {/* Overlay */}
         <div 
           className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
@@ -587,9 +687,9 @@ export const DetallesDocumentoModal: React.FC<DetallesDocumentoModalProps> = ({
         ></div>
 
         {/* Modal */}
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
+        <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-full max-h-[95vh] flex flex-col">
           {/* Header del Modal */}
-          <div className="bg-white px-4 sm:px-6 py-4 border-b border-gray-200">
+          <div className="bg-white px-4 sm:px-6 py-4 border-b border-gray-200 flex-shrink-0">
             <div className="flex items-center justify-between">
                 <h3 className="text-lg sm:text-xl font-semibold text-[#111111]">
                   {documento.tipoDocumento}: {documento.numero} vs{documento.version}
@@ -606,7 +706,7 @@ export const DetallesDocumentoModal: React.FC<DetallesDocumentoModalProps> = ({
           </div>
 
           {/* Contenido del Modal con TabPanel */}
-          <div className="bg-white">
+          <div className="bg-white overflow-y-auto flex-1">
             {/* Header de información */}
             <div className="px-4 sm:px-6 py-4 bg-[#006FB3]">
               <div className="flex items-center justify-between">

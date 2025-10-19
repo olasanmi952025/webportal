@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginPage, DashboardPage, ConsultaMarcasPage, BusquedaDocumentosPage } from './pages';
+import { LoginPage, DashboardPage, ConsultaMarcasPage, BusquedaDocumentosPage, CierreManifiestoCourierPage } from './pages';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import PasswordRecoveryPage from './pages/PasswordRecoveryPage';
@@ -44,6 +44,14 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <BusquedaDocumentosPage />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/cierre-manifiesto" element={
+            <ProtectedRoute>
+              <Layout>
+                <CierreManifiestoCourierPage />
               </Layout>
             </ProtectedRoute>
           } />

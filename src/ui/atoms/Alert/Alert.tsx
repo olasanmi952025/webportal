@@ -11,33 +11,17 @@ import type { AlertsProps } from "./alert.types";
     <div
       id="popup-modal"
       tabIndex={-1}
-      className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full overflow-y-auto overflow-x-hidden"
+      className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center"
     >
-      <div className="relative p-4 w-full max-w-md max-h-full">
-        <div className="relative bg-white rounded-lg shadow-sm">
-          <button
-            type="button"
-            className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            aria-label="Close modal"
-            onClick={onClose}
-          >
-            <svg
-              className="w-3 h-3"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 14"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-            <span className="sr-only">Close modal</span>
-          </button>
+      <div className="relative w-full max-w-md max-h-[95vh] mx-auto">
+        {/* Overlay */}
+        <div 
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          onClick={onClose}
+        ></div>
+
+        {/* Modal */}
+        <div className="relative bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-full max-h-[95vh] overflow-y-auto">
           <div className="p-4 md:p-5 text-center">
             <svg
               className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
@@ -59,14 +43,14 @@ import type { AlertsProps } from "./alert.types";
             </h3>
             <button
               type="button"
-              className="text-white bg-primary hover:bg-dark-primary focus:ring-4 focus:outline-none focus:ring-primary dark:focus:ring-dark-primary font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+              className="text-white bg-[#006FB3] hover:bg-[#006FB3] hover:bg-opacity-90 focus:ring-4 focus:outline-none focus:ring-[#006FB3]/20 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center transition-all duration-200"
               onClick={onHandleConfirm}
             >
               {labelConfirm}
             </button>
             <button
               type="button"
-              className="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+              className="py-2.5 px-5 ms-3 text-sm font-medium text-[#FE6565] focus:outline-none bg-white rounded-lg border border-[#FE6565] hover:bg-[#FE6565] hover:text-white focus:z-10 focus:ring-4 focus:ring-[#FE6565]/20 transition-all duration-200"
               onClick={onClose}
             >
               {labelDismiss}

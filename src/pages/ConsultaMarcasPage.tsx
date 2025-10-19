@@ -406,9 +406,33 @@ const ConsultaMarcasPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
-        <div className="mb-4 sm:mb-6">
+        <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] mb-2">Consulta de Marcas</h1>
-          <div className="mt-2 w-20 h-1 bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-full"></div>
+          <div className="mt-2 w-32 h-1.5 bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-full shadow-sm"></div>
+        </div>
+
+        {/* Banner informativo */}
+        <div className="bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-lg shadow-sm p-4 mb-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-white font-semibold text-sm">Información Importante</h3>
+                <p className="text-white text-xs opacity-90">
+                  Los manifiestos mostrados corresponden al período seleccionado. Utilice los filtros de fecha para ajustar el rango de búsqueda.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-white rounded-full"></div>
+              <div className="w-2 h-2 bg-white bg-opacity-50 rounded-full"></div>
+              <div className="w-2 h-2 bg-white bg-opacity-25 rounded-full"></div>
+            </div>
+          </div>
         </div>
 
         {/* Filtro de fechas */}
@@ -429,28 +453,6 @@ const ConsultaMarcasPage: React.FC = () => {
           }}
           onExportXML={handleExportXML}
         />
-
-        {/* Información adicional */}
-        <div className="mt-4 sm:mt-6 bg-blue-50 p-3 sm:p-4 rounded-lg border border-blue-200">
-          <div className="flex items-start">
-            <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <h3 className="text-sm font-medium text-blue-800">
-                Información Importante
-              </h3>
-              <div className="mt-2 text-sm text-blue-700">
-                <p>
-                  Los manifiestos mostrados corresponden al período seleccionado. 
-                  Utilice los filtros de fecha para ajustar el rango de búsqueda.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Modal Guías Asociadas */}

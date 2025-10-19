@@ -239,7 +239,7 @@ const BusquedaDocumentosPage: React.FC = () => {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] mb-2">Búsqueda de Documentos</h1>
-          <div className="mt-2 w-20 h-1 bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-full"></div>
+          <div className="mt-2 w-32 h-1.5 bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-full shadow-sm"></div>
         </div>
 
         {/* Formulario de búsqueda */}
