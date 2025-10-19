@@ -421,7 +421,7 @@ const ConsultaMarcasPage: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-white font-semibold text-sm">Información Importante</h3>
+                <h3 className="text-white text-left font-semibold text-sm">Información Importante</h3>
                 <p className="text-white text-xs opacity-90">
                   Los manifiestos mostrados corresponden al período seleccionado. Utilice los filtros de fecha para ajustar el rango de búsqueda.
                 </p>

@@ -26,7 +26,6 @@ const CierreManifiestoCourierPage: React.FC = () => {
   const [fechaAceptacionHasta, setFechaAceptacionHasta] = useState('16/10/2025');
   const [numeroAceptacion, setNumeroAceptacion] = useState('');
   const [numeroVuelo, setNumeroVuelo] = useState('');
-  const [emisor, setEmisor] = useState('MENDEZ TRONCOSO, YERKO');
   const [mostrarResultados, setMostrarResultados] = useState(false);
 
   // Estados para selección
@@ -89,7 +88,7 @@ const CierreManifiestoCourierPage: React.FC = () => {
     },
     {
       key: 'numeroAceptacion',
-      label: 'Número de Aceptación',
+      label: 'Nro. Aceptación',
       sortable: true,
       align: 'center'
     },
@@ -119,7 +118,7 @@ const CierreManifiestoCourierPage: React.FC = () => {
     },
     {
       key: 'ciaCourier',
-      label: 'Cia Courier',
+      label: 'Cia. Courier',
       sortable: true,
       align: 'center'
     }
@@ -131,8 +130,7 @@ const CierreManifiestoCourierPage: React.FC = () => {
       fechaAceptacionDesde,
       fechaAceptacionHasta,
       numeroAceptacion,
-      numeroVuelo,
-      emisor
+      numeroVuelo
     });
     setMostrarResultados(true);
   };
@@ -175,7 +173,7 @@ const CierreManifiestoCourierPage: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] mb-2">Conformación Manifiesto Courier</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] mb-2">Cierre de Manifiesto Courier</h1>
           <div className="mt-2 w-32 h-1.5 bg-gradient-to-r from-[#006FB3] to-[#FE6565] rounded-full shadow-sm"></div>
         </div>
 
@@ -189,8 +187,8 @@ const CierreManifiestoCourierPage: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-white font-semibold text-sm">Información Importante</h3>
-                <p className="text-white text-xs opacity-90">Seleccione los manifiestos que desea cerrar para proceder con la conformación.</p>
+                <h3 className="text-white text-left font-semibold text-sm">Información Importante</h3>
+                <p className="text-white text-xs opacity-90">Seleccione los manifiestos que desea cerrar. Utilice los filtros de fecha para ajustar el rango de búsqueda.</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -207,7 +205,7 @@ const CierreManifiestoCourierPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex flex-col">
                 <Label htmlFor="fecha-desde" className="text-white mb-2">
-                  Fecha de Aceptación desde:
+                  Fecha Emisión Desde:
                 </Label>
                 <DatePicker
                   value={fechaAceptacionDesde}
@@ -218,7 +216,7 @@ const CierreManifiestoCourierPage: React.FC = () => {
               </div>
               <div className="flex flex-col">
                 <Label htmlFor="fecha-hasta" className="text-white mb-2">
-                  Fecha de Aceptación hasta:
+                  Fecha Emisión Hasta:
                 </Label>
                 <DatePicker
                   value={fechaAceptacionHasta}
@@ -228,16 +226,16 @@ const CierreManifiestoCourierPage: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <Label htmlFor="numero-aceptacion" className="text-white mb-2">
-                  Número de Aceptación:
+                <Label htmlFor="numero-manifiesto" className="text-white mb-2">
+                  Nº de Manifiesto:
                 </Label>
                 <Input
-                  id="numero-aceptacion"
+                  id="numero-manifiesto"
                   type="text"
                   value={numeroAceptacion}
                   onChange={(e) => setNumeroAceptacion(e.target.value)}
                   className="w-full"
-                  placeholder="Ingrese número de aceptación"
+                  placeholder="Ingrese número de manifiesto"
                 />
               </div>
               <div className="flex flex-col">
@@ -253,25 +251,12 @@ const CierreManifiestoCourierPage: React.FC = () => {
                   placeholder="Ingrese número de vuelo"
                 />
               </div>
-              <div className="flex flex-col">
-                <Label htmlFor="emisor" className="text-white mb-2">
-                  Emisor:
-                </Label>
-                <Input
-                  id="emisor"
-                  type="text"
-                  value={emisor}
-                  onChange={(e) => setEmisor(e.target.value)}
-                  className="w-full"
-                  placeholder="Ingrese emisor"
-                />
-              </div>
-              <div className="flex flex-col justify-end">
+              <div className="flex flex-col justify-end lg:col-start-3">
                 <Button
                   onClick={handleBuscar}
-                  className="bg-[#FE6565] hover:bg-[#FE6565] hover:bg-opacity-90 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-200 shadow-sm"
+                  className="bg-[#FE6565] hover:bg-[#FE6565] hover:bg-opacity-90 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-200 shadow-sm w-full"
                 >
-                  Buscar
+                  Consultar
                 </Button>
               </div>
             </div>

@@ -101,7 +101,7 @@ export const ManifiestosTable: React.FC<ManifiestosTableProps> = ({
           <Button
             onClick={onExportXML}
             variant="outline"
-            className="border-gray-300 text-gray-700 hover:bg-gray-50 text-sm sm:text-base px-4 py-2"
+            className="border-[#A8B7C7] text-[#4A4A4A] hover:bg-[#EEEEEE] hover:border-[#8A8A8A] px-6 py-2 rounded-lg font-semibold transition-all duration-200"
           >
             Exportar
           </Button>

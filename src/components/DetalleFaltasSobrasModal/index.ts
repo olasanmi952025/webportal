@@ -1,0 +1,2 @@
+export { DetalleFaltasSobrasModal } from './DetalleFaltasSobrasModal';
+

@@ -243,9 +243,8 @@ const BusquedaDocumentosPage: React.FC = () => {
         </div>
 
         {/* Formulario de búsqueda */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          {!mostrarResultados ? (
-            <>
+        {!mostrarResultados ? (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           {/* Filtrar por */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-[#111111] mb-4">Filtrar por:</h3>
@@ -470,53 +469,50 @@ const BusquedaDocumentosPage: React.FC = () => {
               Buscar
             </Button>
           </div>
-
-            </>
-          ) : (
-            <>
+          </div>
+        ) : (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               {/* Botón Volver */}
               <div className="flex justify-start mb-6">
                 <Button
                   onClick={handleVolver}
                   variant="outline"
-                  className="border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg font-semibold transition-all duration-200"
+                  className="border-[#A8B7C7] text-[#4A4A4A] hover:bg-[#EEEEEE] hover:border-[#8A8A8A] px-6 py-2 rounded-lg font-semibold transition-all duration-200"
                 >
                   ← Volver
                 </Button>
               </div>
 
-              {/* Tabla de resultados */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-                <div className="p-4 sm:p-6 border-b border-gray-200">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <h2 className="text-lg sm:text-xl font-semibold text-[#111111] text-left">
-                      Documentos encontrados: {documentosEncontrados.length}
-                    </h2>
-                    <Button
-                      onClick={() => console.log('Export XML')}
-                      variant="outline"
-                      className="border-gray-300 text-gray-700 hover:bg-gray-50 text-sm sm:text-base px-4 py-2"
-                    >
-                      Exportar
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="overflow-x-auto">
-                  <div className="min-w-max">
-                    <DataTable
-                      headers={headersDocumentos}
-                      data={documentosEncontrados}
-                      pageSize={5}
-                      showPagination={true}
-                      paginationSize="sm"
-                    />
-                  </div>
+              {/* Header de resultados */}
+              <div className="mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <h2 className="text-lg sm:text-xl font-semibold text-[#111111] text-left">
+                    Documentos encontrados: {documentosEncontrados.length}
+                  </h2>
+                  <Button
+                    onClick={() => console.log('Export XML')}
+                    variant="outline"
+                    className="border-[#A8B7C7] text-[#4A4A4A] hover:bg-[#EEEEEE] hover:border-[#8A8A8A] px-6 py-2 rounded-lg font-semibold transition-all duration-200"
+                  >
+                    Exportar
+                  </Button>
                 </div>
               </div>
-            </>
+              
+              {/* Tabla */}
+              <div className="overflow-x-auto -mx-6">
+                <div className="min-w-max">
+                  <DataTable
+                    headers={headersDocumentos}
+                    data={documentosEncontrados}
+                    pageSize={5}
+                    showPagination={true}
+                    paginationSize="sm"
+                  />
+                </div>
+              </div>
+            </div>
           )}
-        </div>
       </div>
 
       {/* Modal de Detalles */}
